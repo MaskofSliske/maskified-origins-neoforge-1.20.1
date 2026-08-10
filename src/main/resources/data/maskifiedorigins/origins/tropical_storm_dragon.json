@@ -1,0 +1,20 @@
+{
+  "name": "Tropical Storm Dragon",
+  "description": "An omnivorous dragon with attributes and powers relating to tropical storms, is right at home in a tropical climate.",
+  "icon": {
+    "item": "minecraft:tropical_fish"
+  },
+  "order": 0,
+  "impact": 2,
+  "powers": [
+    "maskifiedorigins:summon_lightning",
+    "maskifiedorigins:venom_claws",
+    "maskifiedorigins:hydrodynamic",
+    "maskifiedorigins:cold_blooded",
+    "maskifiedorigins:dragon_sized",
+    "maskifiedorigins:dragon_wings",
+    "maskifiedorigins:diver",
+    "maskifiedorigins:big_appetite",
+    "maskifiedorigins:agile"
+  ]
+}

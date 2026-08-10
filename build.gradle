@@ -18,6 +18,7 @@ version = mod_version
 group = mod_group_id
 
 repositories {
+    maven { url = "https://cursemaven.com" }
     mavenLocal()
 }
 
@@ -116,6 +117,10 @@ obfuscation {
 }
 
 dependencies {
+    modCompileOnly "curse.maven:origins-474438:5314209"
+    modLocalRuntime "curse.maven:origins-474438:5314209"
+    modCompileOnly "curse.maven:caelus-api-308989:5281700"
+    modLocalRuntime "curse.maven:caelus-api-308989:5281700"
     // If you wish to declare dependencies against mods, make sure to use the 'mod*' configurations so that they're remapped.
 	// See https://github.com/neoforged/ModDevGradle/blob/main/LEGACY.md#remapping-mod-dependencies for more information.
 	
