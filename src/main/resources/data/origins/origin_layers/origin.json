@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "order": 1,
+  "enabled": true,
+  "origins": [
+    "maskifiedorigins:tropical_storm_dragon"
+  ],
+  "name": "Origin"
+}
