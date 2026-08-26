@@ -8,7 +8,8 @@
   "impact": 2,
   "powers": [
     "maskifiedorigins:summon_lightning",
-    "maskifiedorigins:venom_claws",
+    "maskifiedorigins:venom",
+    "maskifiedorigins:claws",
     "maskifiedorigins:hydrodynamic",
     "maskifiedorigins:cold_blooded",
     "maskifiedorigins:dragon_sized",

@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_exhaustion",
+  "modifier": {
+    "name": "Big Appetite",
+    "operation": "multiply_base",
+    "value": 0.5
+  },
+  "name": "Big Appetite",
+  "description": "Your size and power is fueled by your equally formidable appetite, you exhaust 50% faster per point of hunger."
+}

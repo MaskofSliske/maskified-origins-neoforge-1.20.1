@@ -1,0 +1,12 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "modifier": {
+    "operation": "addition",
+    "value": 3.0
+  },
+  "item_condition": {
+    "type": "origins:empty"
+  },
+  "name": "Claws",
+  "description": "Your natural claws deal additional unarmed damage."
+}
