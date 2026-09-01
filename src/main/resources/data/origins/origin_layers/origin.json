@@ -3,7 +3,8 @@
   "order": 1,
   "enabled": true,
   "origins": [
-    "maskifiedorigins:tropical_storm_dragon"
+    "maskifiedorigins:tropical_storm_dragon",
+    "maskifiedorigins:abyssal_dragon"
   ],
   "name": "Origin"
 }

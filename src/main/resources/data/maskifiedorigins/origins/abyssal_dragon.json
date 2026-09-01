@@ -2,7 +2,7 @@
   "name": "Abyssal Dragon",
   "description": "Carnivorous, stealthy, and downright dangerous. A draconic child of the End's expansive voids.",
   "icon": {
-    "item": "minecraft:tropical_fish"
+    "item": "minecraft:dragon_egg"
   },
   "order": 0,
   "impact": 3,
