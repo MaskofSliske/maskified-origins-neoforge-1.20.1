@@ -28,7 +28,7 @@ public class OriginSizeEvents {
         if (event.getPose() == Pose.SWIMMING) {
             event.setNewSize(EntityDimensions.scalable(1.0f,1.5f));
         } else {
-            event.setNewSize(EntityDimensions.scalable(1.0f,2.0f));
+            event.setNewSize(EntityDimensions.scalable(1.0f,3.0f));
         }
     }
 
