@@ -1,0 +1,7 @@
+{
+  "name": "Improved Regen",
+  "type": "origins:multiple",
+  "powers": [],
+  "description": "Either by hearty constitution or by blessing, your regeneration is improved. You will heal over time, regardless of saturation or hunger.",
+  "hidden": false
+}
