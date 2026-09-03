@@ -34,7 +34,8 @@ public class OriginScaryEvents {
             OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins", "origin"));
 
     private static final Set<ResourceLocation> SCARY_ORIGINS = new HashSet<>(List.of(
-            new ResourceLocation("maskifiedorigins", "tropical_storm_dragon")
+            new ResourceLocation("maskifiedorigins", "tropical_storm_dragon"),
+            new ResourceLocation("maskifiedorigins","abyssal_dragon")
     ));
 
     private static final double RADIUS = 16.0;
