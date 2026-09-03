@@ -32,6 +32,7 @@ public class OriginAlienAnatomyEvents {
     private static final ResourceLocation ABYSSAL_DRAGON = new ResourceLocation("maskifiedorigins","abyssal_dragon");
 
     @SubscribeEvent
+    @SuppressWarnings("resource")
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -43,6 +44,7 @@ public class OriginAlienAnatomyEvents {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("resource")
     public static void onEffectApplicable(MobEffectEvent.Applicable event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -52,6 +54,7 @@ public class OriginAlienAnatomyEvents {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("resource")
     public static void onLivingAttack(LivingAttackEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -67,10 +70,9 @@ public class OriginAlienAnatomyEvents {
         Entity direct = source.getDirectEntity();
         if (direct instanceof ThrownPotion) return true;
         if (direct instanceof AreaEffectCloud) return true;
-        if (direct instanceof Arrow arrow) return true;
+        if (direct instanceof Arrow) return true;
         if (direct == null) return true; //aka preventing non-entity sourced magic damage if it ever happens for some ungodly reason
-        if (direct == target) return true; //then this is self-inflicted, with the instant damage potion or if someone has a modded in poisoning-via-food type deal
-        return false;
+        return direct == target; //then this is self-inflicted, with the instant damage potion or if someone has a modded in poisoning-via-food type deal
     }
 
     static boolean hasAlienAnatomy(LivingEntity entity) {
