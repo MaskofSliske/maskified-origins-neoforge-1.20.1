@@ -1,7 +1,7 @@
 {
   "type": "origins:attribute",
   "name": "Durable",
-  "description": "Naturally resistant to damage, you have the protection equivalent to iron armor.",
+  "description": "Naturally resistant to damage, you have the protection equivalent to a suit of iron armor.",
   "modifier": {
     "attribute": "minecraft:generic.armor",
     "value": 15,

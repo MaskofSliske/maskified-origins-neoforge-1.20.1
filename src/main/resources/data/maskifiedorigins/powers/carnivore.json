@@ -1,6 +1,18 @@
 {
-  "type": "origins:carnivore",
-  "name": "Carnivore",
-  "description": "Your diet is restricted to meat or neutral foods, you cannot eat vegetables.",
-  "hidden": false
+  "type": "origins:prevent_item_use",
+  "condition": {
+    "conditions": [
+      {"type": "origins:food"},
+      {
+        "type": "origins:inverted",
+        "condition": {
+          "type": "origins:or",
+          "conditions": [
+            {"type": "origins:tag", "tag": "forge:vegetables"},
+            {"type": "origins:tag", "tag": "forge:fruits"}
+          ]
+        }
+      }
+    ]
+  }
 }

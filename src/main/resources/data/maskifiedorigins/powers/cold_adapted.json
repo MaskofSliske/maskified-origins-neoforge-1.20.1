@@ -1,0 +1,7 @@
+{
+  "name": "Cold Adapted",
+  "type": "origins:multiple",
+  "powers": [],
+  "description": "The cold doesn't bother you anyway. Immune to Cold and Freeze damage.",
+  "hidden": false
+}
