@@ -1,0 +1,6 @@
+{
+  "type": "origins:carnivore",
+  "name": "Carnivore",
+  "description": "Your diet is restricted to meat or neutral foods, you cannot eat vegetables.",
+  "hidden": false
+}

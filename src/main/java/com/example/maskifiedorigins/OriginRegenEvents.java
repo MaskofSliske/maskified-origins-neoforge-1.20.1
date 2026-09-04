@@ -20,13 +20,12 @@ import java.util.Set;
 public class OriginRegenEvents {
 
     private static final ResourceKey<OriginLayer> ORIGIN_LAYER = ResourceKey.create(
-            OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins","origin"));
+            OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins", "origin"));
 
     private static final Set<ResourceLocation> REGEN_ORIGINS = Set.of(
-            new ResourceLocation("maskifiedorigins","abyssal_dragon"),
-            new ResourceLocation("maskifiedorigins","avali")
+            new ResourceLocation("maskifiedorigins", "abyssal_dragon"),
+            new ResourceLocation("maskifiedorigins", "avali")
     );
-    private static final String REGEN_STATE_KEY = "maskifiedorigins_regen_active";
 
     @SubscribeEvent
     @SuppressWarnings("resource")
@@ -35,14 +34,13 @@ public class OriginRegenEvents {
         if (player.level().isClientSide()) return;
 
         boolean hasOrigin = hasRegenOrigin(player);
-        boolean applied = player.getPersistentData().getBoolean(REGEN_STATE_KEY);
+        boolean hasEffect = player.hasEffect(MobEffects.REGENERATION);
+        System.out.println("hasOrigin=" + hasOrigin + " hasEffect=" + hasEffect);
 
-        if (hasOrigin && !applied) {
-            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1,0, true, false, false));
-            player.getPersistentData().putBoolean(REGEN_STATE_KEY, true);
-        } else if (!hasOrigin && applied) {
+        if (hasOrigin && !hasEffect) {
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 0, true, false, true));
+        } else if (!hasOrigin && hasEffect) {
             player.removeEffect(MobEffects.REGENERATION);
-            player.getPersistentData().putBoolean(REGEN_STATE_KEY, false);
         }
     }
 

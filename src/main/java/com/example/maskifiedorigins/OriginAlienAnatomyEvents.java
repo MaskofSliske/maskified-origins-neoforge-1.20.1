@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,6 +51,9 @@ public class OriginAlienAnatomyEvents {
         if (player.level().isClientSide()) return;
         if (!hasAlienAnatomy(player)) return;
 
+        if (event.getEffectInstance().getEffect() == MobEffects.REGENERATION && event.getEffectInstance().getDuration() == -1) {
+            return; //trying to get the Regen power to work lol ;w;
+        }
         event.setResult(Event.Result.DENY);
     }
 
