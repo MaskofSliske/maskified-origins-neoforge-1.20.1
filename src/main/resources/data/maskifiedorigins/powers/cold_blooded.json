@@ -1,6 +1,6 @@
 {
   "type": "origins:multiple",
-  "powers": [],
+  "powers": {},
   "name": "Cold-Blooded",
   "description": "Your cold-blooded body is weak to lower temperatures, causing you to experience various concequences such as weakness and increased freeze damage.",
   "hidden": false

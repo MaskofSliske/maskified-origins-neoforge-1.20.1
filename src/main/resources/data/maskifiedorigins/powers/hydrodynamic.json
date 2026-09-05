@@ -2,7 +2,7 @@
   "type": "origins:modify_swim_speed",
   "modifier": {
     "operation": "multiply_base",
-    "value": 0.5
+    "value": 0.7
   },
   "name": "Hydrodynamic",
   "description": "Your streamlined body allows you to be faster than a human would be in water."

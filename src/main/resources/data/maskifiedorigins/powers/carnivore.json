@@ -1,7 +1,7 @@
 {
   "name": "Carnivore",
   "type": "origins:multiple",
-  "powers": [],
+  "powers": {},
   "description": "Meat on the bone is your food of choice.",
   "hidden": false
 }

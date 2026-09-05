@@ -1,7 +1,7 @@
 {
   "name": "Flammable",
   "type": "origins:multiple",
-  "powers": [],
+  "powers": {},
   "description": "Hot stuff and you just don't get along. Take double Fire damage.",
   "hidden": false
 }

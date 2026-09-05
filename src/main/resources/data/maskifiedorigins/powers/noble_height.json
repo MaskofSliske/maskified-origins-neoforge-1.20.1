@@ -1,6 +1,6 @@
 {
   "type": "origins:multiple",
-  "powers": [],
+  "powers": {},
   "name": "Noble Height",
   "description": "You are quite tall, taller than a human would be at least, at 2.5 blocks tall.",
   "hidden": false

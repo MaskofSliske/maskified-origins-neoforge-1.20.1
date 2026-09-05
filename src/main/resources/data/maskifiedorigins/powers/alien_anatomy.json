@@ -1,7 +1,7 @@
 {
   "name": "Alien Anatomy",
   "type": "origins:multiple",
-  "powers": [],
+  "powers": {},
   "description": "By having unique, alien chemistry and anatomy, you have immunity to potion effects and no need for oxygen.",
   "hidden": false
 }

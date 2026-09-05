@@ -1,7 +1,7 @@
 {
   "name": "Voidborne",
   "type": "origins:multiple",
-  "powers": [],
+  "powers": {},
   "description": "The End's vast void is your home, you are known to its denizens. Endermen will not attack you first.",
   "hidden": false
 }
