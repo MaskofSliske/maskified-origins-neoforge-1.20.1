@@ -1,7 +1,25 @@
 {
   "name": "Void Body",
-  "type": "origins:multiple",
-  "powers": [],
-  "description": "Void has this tendency to not fit into rigid shapes. You cannot wear armor or use shields, but you can wear clothing and flexible or wearable trinkets.",
-  "hidden": false
+  "description": "Your body is made of gelatinous void, you cannot use armor stronger than gold.",
+  "type": "origins:restrict_armor",
+  "head": {
+    "type": "origins:armor_value",
+    "comparison": ">",
+    "compare_to": 2
+  },
+  "chest": {
+    "type": "origins:armor_value",
+    "comparison": ">",
+    "compare_to": 5
+  },
+  "legs": {
+    "type": "origins:armor_value",
+    "comparison": ">",
+    "compare_to": 3
+  },
+  "feet": {
+    "type": "origins:armor_value",
+    "comparison": ">",
+    "compare_to": 1
+  }
 }
