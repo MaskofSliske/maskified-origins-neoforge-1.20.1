@@ -35,7 +35,6 @@ public class OriginRegenEvents {
 
         boolean hasOrigin = hasRegenOrigin(player);
         boolean hasEffect = player.hasEffect(MobEffects.REGENERATION);
-        System.out.println("hasOrigin=" + hasOrigin + " hasEffect=" + hasEffect);
 
         if (hasOrigin && !hasEffect) {
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 0, true, false, true));

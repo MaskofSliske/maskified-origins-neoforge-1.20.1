@@ -1,6 +1,5 @@
 package com.example.maskifiedorigins;
 
-
 import io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer;
 import io.github.edwinmindcraft.origins.api.origin.Origin;
 import io.github.edwinmindcraft.origins.api.origin.OriginLayer;
@@ -18,9 +17,11 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -28,12 +29,11 @@ import net.minecraftforge.fml.common.Mod;
 public class OriginAlienAnatomyEvents {
 
     private static final ResourceKey<OriginLayer> ORIGIN_LAYER = ResourceKey.create(
-            OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins","origin"));
+            OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins", "origin"));
 
-    private static final ResourceLocation ABYSSAL_DRAGON = new ResourceLocation("maskifiedorigins","abyssal_dragon");
+    private static final ResourceLocation ABYSSAL_DRAGON = new ResourceLocation("maskifiedorigins", "abyssal_dragon");
 
     @SubscribeEvent
-    @SuppressWarnings("resource")
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -44,21 +44,20 @@ public class OriginAlienAnatomyEvents {
         }
     }
 
-    @SubscribeEvent
-    @SuppressWarnings("resource")
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEffectApplicable(MobEffectEvent.Applicable event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
         if (!hasAlienAnatomy(player)) return;
 
         if (event.getEffectInstance().getEffect() == MobEffects.REGENERATION && event.getEffectInstance().getDuration() == -1) {
-            return; //trying to get the Regen power to work lol ;w;
+            return;
         }
+
         event.setResult(Event.Result.DENY);
     }
 
     @SubscribeEvent
-    @SuppressWarnings("resource")
     public static void onLivingAttack(LivingAttackEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -75,8 +74,18 @@ public class OriginAlienAnatomyEvents {
         if (direct instanceof ThrownPotion) return true;
         if (direct instanceof AreaEffectCloud) return true;
         if (direct instanceof Arrow) return true;
-        if (direct == null) return true; //aka preventing non-entity sourced magic damage if it ever happens for some ungodly reason
-        return direct == target; //then this is self-inflicted, with the instant damage potion or if someone has a modded in poisoning-via-food type deal
+        if (direct == null) return true; // no entity attached
+        return direct == target; // self-inflicted, e.g. drinking a Harming potion directly
+    }
+
+    @SubscribeEvent
+    public static void onUseItemStart(LivingEntityUseItemEvent.Start event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.level().isClientSide()) return;
+        if (!hasAlienAnatomy(player)) return;
+        if (!event.getItem().is(net.minecraft.world.item.Items.SUSPICIOUS_STEW)) return;
+
+        event.setCanceled(true);
     }
 
     static boolean hasAlienAnatomy(LivingEntity entity) {
