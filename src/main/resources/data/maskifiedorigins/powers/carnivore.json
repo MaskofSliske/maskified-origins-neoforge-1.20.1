@@ -1,18 +1,7 @@
 {
-  "type": "origins:prevent_item_use",
-  "condition": {
-    "conditions": [
-      {"type": "origins:food"},
-      {
-        "type": "origins:inverted",
-        "condition": {
-          "type": "origins:or",
-          "conditions": [
-            {"type": "origins:tag", "tag": "forge:vegetables"},
-            {"type": "origins:tag", "tag": "forge:fruits"}
-          ]
-        }
-      }
-    ]
-  }
+  "name": "Carnivore",
+  "type": "origins:multiple",
+  "powers": [],
+  "description": "Meat on the bone is your food of choice.",
+  "hidden": false
 }

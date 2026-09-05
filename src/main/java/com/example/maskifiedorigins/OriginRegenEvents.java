@@ -37,7 +37,7 @@ public class OriginRegenEvents {
         boolean hasEffect = player.hasEffect(MobEffects.REGENERATION);
 
         if (hasOrigin && !hasEffect) {
-            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 0, true, false, true));
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 0, true, false, false));
         } else if (!hasOrigin && hasEffect) {
             player.removeEffect(MobEffects.REGENERATION);
         }
