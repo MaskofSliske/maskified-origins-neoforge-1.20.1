@@ -1,0 +1,72 @@
+{
+  "type": "origins:multiple",
+  "name": "Fluid-like Physiology",
+  "description": "Toggle a liquid form: slip through blocks and turn invisible at the cost of hunger. Turns off automatically when your hunger runs out.",
+  "toggle": {
+    "type": "origins:toggle",
+    "active_by_default": false,
+    "retain_state": false,
+    "key": {
+      "key": "key.origins.primary_active"
+    },
+    "condition": {
+      "type": "origins:food_level",
+      "comparison": ">",
+      "compare_to": 0
+    }
+  },
+  "phase": {
+    "type": "origins:phasing",
+    "blacklist": true,
+    "render_type": "blindness",
+    "view_distance": 16,
+    "block_condition": {
+      "type": "origins:in_tag",
+      "tag": "origins:unphasable"
+    },
+    "phase_down_condition": {
+      "type": "origins:and",
+      "conditions": [
+        {"type": "origins:sneaking"},
+        {"type": "origins:on_block"}
+      ]
+    },
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "invisibility": {
+    "type": "origins:invisibility",
+    "render_armor": false,
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "hunger_drain": {
+    "type": "apoli:exhaust",
+    "interval": 20,
+    "exhaustion": 2.0,
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "step_particles": {
+    "type": "origins:particle",
+    "particle": "minecraft:dragon_breath",
+    "count": 3,
+    "spread": { "x": 0.3, "y": 0.05, "z": 0.3 },
+    "offset_y": 0.1,
+    "frequency": 6,
+    "visible_while_invisible": true,
+    "condition": {
+      "type": "origins:and",
+      "conditions": [
+        { "type": "origins:power_active", "power": "*:*_toggle" },
+        { "type": "apoli:moving" }
+      ]
+    }
+  }
+}
