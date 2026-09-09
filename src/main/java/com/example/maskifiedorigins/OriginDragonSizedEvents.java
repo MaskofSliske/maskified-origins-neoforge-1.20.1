@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = MaskifiedOrigins.MODID)
-public class OriginSizeEvents {
+public class OriginDragonSizedEvents {
 
     private static final ResourceKey<OriginLayer> ORIGIN_LAYER =
             ResourceKey.create(OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins","origin"));

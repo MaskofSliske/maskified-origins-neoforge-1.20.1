@@ -1,0 +1,23 @@
+{
+  "type": "origins:multiple",
+  "name": "Standard Augments",
+  "description": "The standard assortment of augments for any wandering Avali.",
+  "augmented_jump": {
+    "type": "origins:modify_jump",
+    "modifier": {
+      "operation": "multiply_base_additive",
+      "value": 0.5
+    }
+  },
+  "augmented_blast_resist": {
+    "type": "origins:modify_damage_taken",
+    "modifier": {
+      "type": "origins:multiply_base_additive",
+      "value": 0.5
+    },
+    "damage_condition": {
+      "type": "origins:is_of_type",
+      "damage_type": "#minecraft:is_explosion"
+    }
+  }
+}

@@ -4,7 +4,8 @@
   "enabled": true,
   "origins": [
     "maskifiedorigins:tropical_storm_dragon",
-    "maskifiedorigins:abyssal_dragon"
+    "maskifiedorigins:abyssal_dragon",
+    "maskifiedorigins:avali"
   ],
   "name": "Origin"
 }
