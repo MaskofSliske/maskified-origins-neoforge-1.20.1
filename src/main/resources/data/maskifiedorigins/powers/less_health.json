@@ -1,0 +1,13 @@
+{
+  "type": "origins:attribute",
+  "name": "Less Health",
+  "description": "You have half of the constitution of a Human",
+  "modifiers": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "multiply_total",
+      "value": -0.5,
+      "slow": "any"
+    }
+  ]
+}

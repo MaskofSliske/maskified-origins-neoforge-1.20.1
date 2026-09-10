@@ -7,7 +7,6 @@ import io.github.edwinmindcraft.origins.api.registry.OriginsDynamicRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -21,11 +20,11 @@ public class OriginSmolEvents {
             ResourceKey.create(OriginsDynamicRegistries.LAYERS_REGISTRY, new ResourceLocation("origins","origin"));
 
     @SubscribeEvent
-    public static void onEntitySizeAvali(EntityEvent.Size event) {
+    public static void onEntitySize(EntityEvent.Size event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (!isAvali(player)) return;
 
-        event.setNewSize(EntityDimensions.scalable(0.5f, 1.0f));
+        event.setNewSize(EntityDimensions.scalable(0.5f, 0.5f));
     }
     private static boolean isAvali(Player player) {
         LazyOptional<IOriginContainer> containerOpt = IOriginContainer.get(player);

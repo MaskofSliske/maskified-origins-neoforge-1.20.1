@@ -1,7 +1,7 @@
 {
   "type": "origins:multiple",
   "name": "Standard Augments",
-  "description": "The standard assortment of augments for any wandering Avali.",
+  "description": "The Standard Assortment of augments for any wandering Avali: blast resistance, jump assist, fall speed, and negation of fall damage.",
   "augmented_jump": {
     "type": "origins:modify_jump",
     "modifier": {
@@ -9,15 +9,23 @@
       "value": 0.5
     }
   },
+  "fall_modification": {
+    "type": "origins:modify_falling",
+    "velocity": 0.05,
+    "take_fall_damage": "false"
+  },
   "augmented_blast_resist": {
     "type": "origins:modify_damage_taken",
-    "modifier": {
-      "type": "origins:multiply_base_additive",
-      "value": 0.5
-    },
     "damage_condition": {
-      "type": "origins:is_of_type",
-      "damage_type": "#minecraft:is_explosion"
+      "type": "origins:or",
+      "conditions": [
+        {"type": "origins:name","name": "explosion"},
+        {"type": "origins:name","name": "explosion.player"}
+      ]
+    },
+    "modifier": {
+      "operation": "multiply_total",
+      "value": -0.5
     }
   }
 }

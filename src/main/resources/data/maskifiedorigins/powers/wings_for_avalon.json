@@ -1,6 +1,6 @@
 {
   "type": "origins:elytra_flight",
-  "render_elytra": true,
+  "render_elytra": false,
   "name": "Wings for Avalon",
   "description": "Perfect for gliding, but might need a boost. Rocket for Uppies!"
 }
