@@ -1,0 +1,7 @@
+{
+  "type": "origins:multiple",
+  "powers": {},
+  "name": "Ammonia Physiology",
+  "description": "Your ammonia-based biology makes positive potion effects useless. Makes certain stews ineffective as well due to enzymes.",
+  "hidden": false
+}

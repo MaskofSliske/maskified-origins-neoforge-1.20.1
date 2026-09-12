@@ -1,7 +1,7 @@
 {
   "type": "origins:multiple",
   "name": "Standard Augments",
-  "description": "The Standard Assortment of augments for any wandering Avali: blast resistance, jump assist, fall speed, and negation of fall damage.",
+  "description": "The Standard Assortment of augments for any wandering Avali: blast resistance, jump assist, fall speed, and negation of fall damage. Not to mention being able to eat the same things that humans can and being able to touch water safely.",
   "augmented_jump": {
     "type": "origins:modify_jump",
     "modifier": {
