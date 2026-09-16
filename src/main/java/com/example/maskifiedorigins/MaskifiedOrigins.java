@@ -1,5 +1,7 @@
 package com.example.maskifiedorigins;
 
+import com.example.maskifiedorigins.entity.DroneEntity;
+import com.example.maskifiedorigins.registry.ModEntities;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.Blocks;
@@ -29,9 +31,11 @@ public class MaskifiedOrigins
     public MaskifiedOrigins()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModEntities.ENTITY_TYPES.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::onEntityAttributeCreation);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -72,5 +76,9 @@ public class MaskifiedOrigins
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
+    }
+
+    private void onEntityAttributeCreation(net.minecraftforge.event.entity.EntityAttributeCreationEvent event){
+        event.put(ModEntities.DRONE.get(), DroneEntity.createAttributes().build());
     }
 }

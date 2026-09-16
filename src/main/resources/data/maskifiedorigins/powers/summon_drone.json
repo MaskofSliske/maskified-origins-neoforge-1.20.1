@@ -1,0 +1,20 @@
+{
+  "type": "origins:active_self",
+  "key": {
+    "key" : "key.origins.primary_active",
+    "continuous": false
+  },
+  "cooldown": 600,
+  "hud_render": {
+    "should_render": true
+  },
+  "name": "Summon: Drone",
+  "description": "Summon a drone of Avali make to follow and protect you, seems standardized.",
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {"type": "maskifiedorigins:summon_drone"},
+      {"type": "origins:exhaust", "amount": 4}
+    ]
+  }
+}

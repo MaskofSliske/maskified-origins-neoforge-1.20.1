@@ -4,9 +4,12 @@ import io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer;
 import io.github.edwinmindcraft.origins.api.origin.Origin;
 import io.github.edwinmindcraft.origins.api.origin.OriginLayer;
 import io.github.edwinmindcraft.origins.api.registry.OriginsDynamicRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
@@ -34,6 +37,7 @@ public class OriginAlienAnatomyEvents {
     private static final ResourceLocation ABYSSAL_DRAGON = new ResourceLocation("maskifiedorigins", "abyssal_dragon");
 
     @SubscribeEvent
+    @SuppressWarnings("resource")
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -45,6 +49,7 @@ public class OriginAlienAnatomyEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SuppressWarnings("resource")
     public static void onEffectApplicable(MobEffectEvent.Applicable event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
@@ -58,14 +63,18 @@ public class OriginAlienAnatomyEvents {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("resource")
     public static void onLivingAttack(LivingAttackEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
         if (!hasAlienAnatomy(player)) return;
-        if (!isPotionInstantDamage(event.getSource(), player)) return;
+        if (!isPotionInstantDamage(event.getSource(), player) && !event.getSource().is(ALIEN_ANATOMY_IMMUNE_DAMAGE)) return;
 
         event.setCanceled(true);
     }
+
+    private static final TagKey<DamageType> ALIEN_ANATOMY_IMMUNE_DAMAGE = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("maskifiedorigins", "alien_anatomy_immune"));
+    //so basically, was encountering an issue with Ad Astra here, making sure I can quickly bust out a patch or smth if I encounter this type of situation again!
 
     private static boolean isPotionInstantDamage(DamageSource source, LivingEntity target) {
         if (!source.is(DamageTypes.MAGIC) && !source.is(DamageTypes.INDIRECT_MAGIC)) return false;
@@ -79,6 +88,7 @@ public class OriginAlienAnatomyEvents {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("resource")
     public static void onUseItemStart(LivingEntityUseItemEvent.Start event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
