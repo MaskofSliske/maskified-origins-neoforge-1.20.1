@@ -1,6 +1,6 @@
 package com.example.maskifiedorigins.power;
 
-import com.example.maskifiedorigins.entity.DroneEntity;
+import com.example.maskifiedorigins.entity.custom.DroneEntity;
 import com.example.maskifiedorigins.registry.ModEntities;
 import io.github.edwinmindcraft.apoli.api.configuration.NoConfiguration;
 import io.github.edwinmindcraft.apoli.api.power.factory.EntityAction;

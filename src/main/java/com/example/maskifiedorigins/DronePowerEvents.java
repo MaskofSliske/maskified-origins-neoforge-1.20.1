@@ -1,6 +1,6 @@
 package com.example.maskifiedorigins;
 
-import com.example.maskifiedorigins.entity.DroneEntity;
+import com.example.maskifiedorigins.entity.custom.DroneEntity;
 import io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer;
 import io.github.edwinmindcraft.origins.api.origin.Origin;
 import io.github.edwinmindcraft.origins.api.origin.OriginLayer;

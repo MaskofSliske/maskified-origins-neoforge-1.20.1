@@ -1,6 +1,6 @@
 package com.example.maskifiedorigins;
 
-import com.example.maskifiedorigins.entity.DroneEntity;
+import com.example.maskifiedorigins.entity.custom.DroneEntity;
 import com.example.maskifiedorigins.registry.ModEntities;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -55,14 +55,6 @@ public class MaskifiedOrigins
         LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
 
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
-    }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
