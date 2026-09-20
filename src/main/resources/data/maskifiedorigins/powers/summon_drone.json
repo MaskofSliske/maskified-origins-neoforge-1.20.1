@@ -4,7 +4,7 @@
     "key" : "key.origins.primary_active",
     "continuous": false
   },
-  "cooldown": 600,
+  "cooldown": 100,
   "hud_render": {
     "should_render": true
   },
