@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -19,9 +20,7 @@ import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -34,8 +33,8 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     private static final EntityDataAccessor<Boolean> DATA_RESTING =
             SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.BOOLEAN);
 
-    private static final double IDLE_RANGE = 8.0D; // range for idling
-    private static final int IDLE_TICKS_TO_REST = 12000; // 10 minute timer for idle animation, within the range above
+    private static final double IDLE_RANGE = 8.0D;
+    private static final int IDLE_TICKS_TO_REST = 12000;
     private static final double FOLLOW_RANGE = 32.0D;
     private static final double HOVER_HEIGHT = 1.5D;
 
@@ -74,12 +73,19 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     @Override
+    protected BodyRotationControl createBodyControl() {
+        return new BodyRotationControl(this) {
+            @Override
+            public void clientTick() {
+            }
+        };
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.0D, 20, 16.0F));
+        this.goalSelector.addGoal(1, new DroneShootGoal(this));
         this.goalSelector.addGoal(2, new HoverNearOwnerGoal(this));
-        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -92,11 +98,39 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
         double dx = target.getX() - this.getX();
         double dy = target.getY(0.33D) - arrow.getY();
         double dz = target.getZ() - this.getZ();
-        arrow.shoot(dz, dy + Math.sqrt(dx * dx + dz * dz) * 0.2D, dz, 1.6F, 8.0F);
+        arrow.shoot(dx, dy + Math.sqrt(dx * dx + dz * dz) * 0.2D, dz, 1.6F, 8.0F);
         this.level().addFreshEntity(arrow);
     }
 
-    //so it has proper separation of the auto-sit and click-sit behaviors ofc
+    private static class DroneShootGoal extends Goal {
+        private final DroneEntity drone;
+        private int cooldown = 10;
+
+        DroneShootGoal(DroneEntity drone) {
+            this.drone = drone;
+            this.setFlags(EnumSet.of(Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            LivingEntity t = this.drone.getTarget();
+            return t != null && t.isAlive() && !this.drone.isOrderedToSit();
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity t = this.drone.getTarget();
+            if (t == null) return;
+            this.drone.getLookControl().setLookAt(t, 30.0F, 30.0F);
+            if (--this.cooldown <= 0
+                    && this.drone.distanceToSqr(t) <= 256.0D
+                    && this.drone.hasLineOfSight(t)) {
+                this.drone.performRangedAttack(t, 1.0F);
+                this.cooldown = 20;
+            }
+        }
+    }
+
     private static class HoverNearOwnerGoal extends Goal {
         private final DroneEntity drone;
 
@@ -129,14 +163,13 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
         }
     }
 
-    /** Sneak-interact toggles the sticky vanilla sit — stays until toggled again, ignores everything else. */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!this.level().isClientSide() && player.isShiftKeyDown() && player.equals(this.getOwner())) {
             boolean sitting = !this.isOrderedToSit();
             this.setOrderedToSit(sitting);
             if (sitting) {
-                this.setResting(false); // sit order takes over from idle-rest
+                this.setResting(false);
                 this.setTarget(null);
             }
             return InteractionResult.SUCCESS;
@@ -147,6 +180,11 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     @Override
     public void tick() {
         super.tick();
+        LivingEntity owner = this.getOwner();
+        if (owner != null && !this.level().isClientSide()) {
+            this.setYRot(owner.getYRot());
+        }
+        this.yBodyRot = this.getYRot();
         if (this.level().isClientSide()) {
             this.tickAnimationStates();
         } else {
@@ -157,7 +195,7 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     private void tickIdleRestLogic() {
         if (this.isOrderedToSit()) {
             this.idleTicks = 0;
-            return; // sit order overrides idle-rest entirely
+            return;
         }
 
         LivingEntity owner = this.getOwner();
@@ -184,8 +222,6 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
 
         this.deathAnimationState.animateWhen(this.isDeadOrDying(), this.tickCount);
         this.landingGearAnimationState.animateWhen(gearDeployed, this.tickCount);
-        // Rotors/hover bob keep running while idle-resting since it's still airborne and following;
-        // only a real sit order or death stops them.
         this.flyingAnimationState.animateWhen(!sitting && !this.isDeadOrDying(), this.tickCount);
     }
 
@@ -197,7 +233,6 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
         this.entityData.set(DATA_RESTING, resting);
     }
 
-    /** Rotors: on while flying and alive, frozen on death or while sitting. */
     public boolean rotorsSpinning() {
         return this.flyingAnimationState.isStarted() && !this.deathAnimationState.isStarted();
     }
@@ -207,11 +242,6 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
         this.setPersistenceRequired();
     }
 
-    /**
-     * Self-contained spawn + bind, enforcing one drone per owner. Call this directly from
-     * wherever the summon power fires in Java, and you won't need DroneEvents' nearest-player
-     * guessing at all — this is the cleaner path if that's an option for your setup.
-     */
     public static DroneEntity summon(ServerLevel level, Player owner, EntityType<DroneEntity> type) {
         List<DroneEntity> existing = level.getEntitiesOfClass(DroneEntity.class,
                 owner.getBoundingBox().inflate(64.0D), t -> owner.getUUID().equals(t.getOwnerUUID()));

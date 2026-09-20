@@ -2,13 +2,15 @@ package com.example.maskifiedorigins.entity.client;// Made with Blockbench 4.12.
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
+import com.example.maskifiedorigins.entity.animations.DroneModelAnims;
+import com.example.maskifiedorigins.entity.custom.DroneEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.Entity;
+import com.example.maskifiedorigins.entity.custom.DroneEntity;
 
-public class DroneModel<T extends Entity> extends HierarchicalModel<T> {
+public class DroneModel<T extends DroneEntity> extends HierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	private final ModelPart mainbody;
 	private final ModelPart landinggearwings;
@@ -78,6 +80,11 @@ public class DroneModel<T extends Entity> extends HierarchicalModel<T> {
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
+		this.head.xRot = headPitch * ((float) Math.PI / 180F);
+		this.animate(entity.flyingAnimationState, DroneModelAnims.RotorAnim, ageInTicks);
+		this.animate(entity.landingGearAnimationState, DroneModelAnims.WingsLandAnim, ageInTicks);
 	}
 
 	@Override

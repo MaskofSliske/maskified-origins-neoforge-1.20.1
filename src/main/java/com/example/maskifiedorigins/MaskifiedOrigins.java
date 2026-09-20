@@ -2,6 +2,7 @@ package com.example.maskifiedorigins;
 
 import com.example.maskifiedorigins.entity.custom.DroneEntity;
 import com.example.maskifiedorigins.registry.ModEntities;
+import com.example.maskifiedorigins.registry.ModEntityActions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.Blocks;
@@ -32,10 +33,10 @@ public class MaskifiedOrigins
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModEntities.ENTITY_TYPES.register(modEventBus);
+        ModEntityActions.ENTITY_ACTIONS.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::onEntityAttributeCreation);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -68,9 +69,17 @@ public class MaskifiedOrigins
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
-    }
 
-    private void onEntityAttributeCreation(net.minecraftforge.event.entity.EntityAttributeCreationEvent event){
-        event.put(ModEntities.DRONE.get(), DroneEntity.createAttributes().build());
+        @SubscribeEvent
+        public static void onLayers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions e) {
+            e.registerLayerDefinition(com.example.maskifiedorigins.entity.client.ModModelLayers.DRONE_LAYER,
+                    com.example.maskifiedorigins.entity.client.DroneModel::createBodyLayer);
+        }
+
+        @SubscribeEvent
+        public static void onRenderers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers e) {
+            e.registerEntityRenderer(com.example.maskifiedorigins.registry.ModEntities.DRONE.get(),
+                    com.example.maskifiedorigins.entity.client.DroneRenderer::new);
+        }
     }
 }

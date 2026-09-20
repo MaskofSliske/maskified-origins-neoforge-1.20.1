@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class DroneRenderer extends MobRenderer<DroneEntity, DroneModel<DroneEntity>> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(MaskifiedOrigins.MODID, "textures/entity/DroneTexture.png");
+            new ResourceLocation(MaskifiedOrigins.MODID, "textures/entity/dronetexture.png");
 
     public DroneRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new DroneModel<>(ctx.bakeLayer(ModModelLayers.DRONE_LAYER)), 0.2f);
