@@ -4,8 +4,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -105,7 +103,7 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
         @Override
         public boolean canUse() {
             LivingEntity t = this.drone.getTarget();
-            return t != null && t.isAlive() && !this.drone.isOrderedToSit();
+            return t != null && t.isAlive();
         }
 
         @Override
@@ -132,7 +130,7 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
 
         @Override
         public boolean canUse() {
-            return !this.drone.isOrderedToSit() && this.drone.getOwner() != null;
+            return this.drone.getOwner() != null;
         }
 
         @Override
@@ -155,30 +153,6 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!this.level().isClientSide() && player.isShiftKeyDown() && player.equals(this.getOwner())) {
-            boolean sitting = !this.isOrderedToSit();
-            this.setOrderedToSit(sitting);
-            this.setInSittingPose(sitting);
-            if (sitting) {
-                this.setResting(false);
-                this.setTarget(null);
-            }
-            return InteractionResult.SUCCESS;
-        }
-        return super.mobInteract(player, hand);
-    }
-
-    @Override
-    public void travel(Vec3 movement) {
-        if (this.isOrderedToSit()) {
-            this.setDeltaMovement(Vec3.ZERO);
-            return;
-        }
-        super.travel(movement);
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (this.level().isClientSide()) {
@@ -189,11 +163,6 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     private void tickIdleRestLogic() {
-        if (this.isOrderedToSit()) {
-            this.idleTicks = 0;
-            return;
-        }
-
         LivingEntity owner = this.getOwner();
         if (owner == null) return;
 
@@ -213,12 +182,11 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     private void tickAnimationStates() {
-        boolean sitting = this.isInSittingPose();
-        boolean gearDeployed = sitting || this.isResting() || this.isDeadOrDying();
+        boolean gearDeployed = this.isResting() || this.isDeadOrDying();
 
         this.deathAnimationState.animateWhen(this.isDeadOrDying(), this.tickCount);
         this.landingGearAnimationState.animateWhen(gearDeployed, this.tickCount);
-        this.flyingAnimationState.animateWhen(!sitting && !this.isDeadOrDying(), this.tickCount);
+        this.flyingAnimationState.animateWhen(!this.isDeadOrDying(), this.tickCount);
     }
 
     public boolean isResting() {
