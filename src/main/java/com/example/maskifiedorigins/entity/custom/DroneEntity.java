@@ -4,13 +4,11 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -74,19 +72,11 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     @Override
-    protected BodyRotationControl createBodyControl() {
-        return new BodyRotationControl(this) {
-            @Override
-            public void clientTick() {
-            }
-        };
-    }
-
-    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new DroneShootGoal(this));
         this.goalSelector.addGoal(2, new HoverNearOwnerGoal(this));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -123,7 +113,6 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
             LivingEntity t = this.drone.getTarget();
             if (t == null) return;
             this.drone.getLookControl().setLookAt(t, 30.0F, 30.0F);
-            this.drone.getLookControl().tick();
             if (--this.cooldown <= 0
                     && this.drone.distanceToSqr(t) <= 256.0D
                     && this.drone.hasLineOfSight(t)) {
@@ -170,6 +159,7 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
         if (!this.level().isClientSide() && player.isShiftKeyDown() && player.equals(this.getOwner())) {
             boolean sitting = !this.isOrderedToSit();
             this.setOrderedToSit(sitting);
+            this.setInSittingPose(sitting);
             if (sitting) {
                 this.setResting(false);
                 this.setTarget(null);
@@ -180,21 +170,17 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     @Override
+    public void travel(Vec3 movement) {
+        if (this.isOrderedToSit()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            return;
+        }
+        super.travel(movement);
+    }
+
+    @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide()) {
-            LivingEntity target = this.getTarget();
-            LivingEntity owner = this.getOwner();
-            if (target != null && target.isAlive()) {
-                double dx = target.getX() - this.getX();
-                double dz = target.getZ() - this.getZ();
-                this.setYRot((float) (Mth.atan2(dz, dx) * (180.0D / Math.PI)) - 90.0F);
-            } else if (owner != null) {
-                this.setYRot(owner.getYRot());
-            }
-        }
-        this.yBodyRot = this.getYRot();
-        this.yHeadRot = this.getYRot();
         if (this.level().isClientSide()) {
             this.tickAnimationStates();
         } else {
@@ -227,7 +213,7 @@ public class DroneEntity extends TamableAnimal implements FlyingAnimal, RangedAt
     }
 
     private void tickAnimationStates() {
-        boolean sitting = this.isOrderedToSit();
+        boolean sitting = this.isInSittingPose();
         boolean gearDeployed = sitting || this.isResting() || this.isDeadOrDying();
 
         this.deathAnimationState.animateWhen(this.isDeadOrDying(), this.tickCount);
