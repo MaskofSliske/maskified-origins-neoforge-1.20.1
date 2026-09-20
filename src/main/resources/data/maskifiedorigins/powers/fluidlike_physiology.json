@@ -36,6 +36,17 @@
       "power": "*:*_toggle"
     }
   },
+  "wall_immunity": {
+    "type": "origins:invulnerability",
+    "damage_condition": {
+      "type": "origins:name",
+      "name": "inWall"
+    },
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
   "invisibility": {
     "type": "origins:invisibility",
     "render_armor": false,
