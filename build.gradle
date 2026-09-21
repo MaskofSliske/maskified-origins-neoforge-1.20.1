@@ -98,7 +98,7 @@ legacyForge {
         // these are used to tell the game which sources are for which mod
         // mostly optional in a single mod project
         // but multi mod projects should define one per mod
-        "${mod_id}" {
+        "maskifiedorigins" {
             sourceSet(sourceSets.main)
         }
     }
@@ -125,6 +125,8 @@ dependencies {
     modLocalRuntime "curse.maven:caelus-api-308989:5281700"
     modCompileOnly "curse.maven:apoli-forge-975561:5404008"
     modLocalRuntime "curse.maven:apoli-forge-975561:5404008"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    compileOnly 'org.spongepowered:mixin:0.8.5'
 
     // If you wish to declare dependencies against mods, make sure to use the 'mod*' configurations so that they're remapped.
 	// See https://github.com/neoforged/ModDevGradle/blob/main/LEGACY.md#remapping-mod-dependencies for more information.
@@ -155,8 +157,8 @@ dependencies {
 // Uncomment the lines below if you wish to configure mixin. The mixin file should be named modid.mixins.json.
 
 mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
+    add sourceSets.main, "maskifiedorigins.refmap.json"
+    config "maskifiedorigins.mixins.json"
 }
 
 dependencies {
@@ -213,6 +215,10 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
