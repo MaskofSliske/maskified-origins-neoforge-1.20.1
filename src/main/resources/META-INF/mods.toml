@@ -27,7 +27,7 @@ license="GNU GPLv3"
 modId="maskifiedorigins" #mandatory
 
 # The version number of the mod
-version="1.5" #mandatory
+version="1.6" #mandatory
 
 # A display name for the mod
 displayName="Maskified Origins" #mandatory
